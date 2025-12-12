@@ -2,8 +2,7 @@ name: ➡️ Pull Request
 
 on:
   - pull_request
-  - push
-  
+
 permissions:
   id-token: write
   contents: write
@@ -11,6 +10,6 @@ permissions:
 jobs:
   pull-request:
     name: Pull Request
-    uses: rNimbus-com/ci-workflows/.github/workflows/pr-tofu.yml@feature/tofu-pr
+    uses: rNimbus-com/ci-workflows/.github/workflows/pr-tofu.yml@v1
     with:
       working-dir: argocd_app
