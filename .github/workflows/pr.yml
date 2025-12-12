@@ -11,6 +11,6 @@ permissions:
 jobs:
   pull-request:
     name: Pull Request
-    uses: rNimbus-com/ci-workflows/.github/workflows/pr.yml@feature/tofu-pr
+    uses: rNimbus-com/ci-workflows/.github/workflows/pr-tofu.yml@feature/tofu-pr
     with:
       working-dir: argocd_app
