@@ -139,12 +139,12 @@ variable "ignore_differences" {
     - namespace: The Kubernetes resource Namespace to match for.
   EOT
   type = list(object({
-    group                = optional(string, null)
-    jq_path_expressions  = optional(set(string), [])
-    json_pointers        = optional(set(string), [])
-    kind                 = optional(string, null)
-    name                 = optional(string, null)
-    namespace            = optional(string, null)
+    group               = optional(string, null)
+    jq_path_expressions = optional(set(string), [])
+    json_pointers       = optional(set(string), [])
+    kind                = optional(string, null)
+    name                = optional(string, null)
+    namespace           = optional(string, null)
   }))
   default = null
 }
