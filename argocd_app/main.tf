@@ -47,6 +47,18 @@ resource "argocd_application" "app" {
       }
     }
 
+    dynamic "ignore_difference" {
+      for_each = can(coalesce(var.ignore_differences, null)) ? var.ignore_differences : []
+      content {
+        group               = ignore_difference.value.group
+        jq_path_expressions = ignore_difference.value.jq_path_expressions
+        json_pointers       = ignore_difference.value.json_pointers
+        kind                = ignore_difference.value.kind
+        name                = ignore_difference.value.name
+        namespace           = ignore_difference.value.namespace
+      }
+    }
+
     sync_policy {
       automated {
         prune       = var.sync_policy.automated.prune
