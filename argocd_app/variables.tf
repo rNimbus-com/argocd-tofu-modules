@@ -125,3 +125,26 @@ variable "wait" {
   description = "Wait for the application to be synced."
   default     = true
 }
+
+variable "ignore_differences" {
+  description = <<-EOT
+    Configurations for ignoring differences during sync operations.
+    
+    The following nested properties are supported:
+    - group: The Kubernetes resource Group to match for.
+    - jq_path_expressions: List of JQ path expression strings targeting the field(s) to ignore.
+    - json_pointers: List of JSONPaths strings targeting the field(s) to ignore.
+    - kind: The Kubernetes resource Kind to match for.
+    - name: The Kubernetes resource Name to match for.
+    - namespace: The Kubernetes resource Namespace to match for.
+  EOT
+  type = list(object({
+    group               = optional(string, null)
+    jq_path_expressions = optional(set(string), [])
+    json_pointers       = optional(set(string), [])
+    kind                = optional(string, null)
+    name                = optional(string, null)
+    namespace           = optional(string, null)
+  }))
+  default = null
+}
