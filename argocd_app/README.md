@@ -6,7 +6,7 @@ This module creates a single ArgoCD application resource in Kubernetes. It's bas
 
 ```hcl
 module "my_app" {
-  source = "../modules/argocd_app"
+  source = "git::https://github.com/rNimbus-com/argocd-tofu-modules.git//argocd_app?ref=v1"
   
   app_name      = "my-application"
   app_namespace = "argocd"
@@ -24,7 +24,7 @@ module "my_app" {
     }
   }
   
-  # OR for manifest applications
+  # Directory / Kustomize source (can be combined with helm_app)
   manifest_app = {
     source_repo     = "https://github.com/example/my-repo"
     path            = "manifests"
@@ -50,33 +50,6 @@ module "my_app" {
 }
 ```
 
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|----------|
-| app_name | The name of the ArgoCD application. | `string` | n/a | yes |
-| app_namespace | The namespace where the ArgoCD application resource should be created. | `string` | n/a | yes |
-| namespace | The target namespace where the application should be deployed. | `string` | n/a | yes |
-| destination_server | The Kubernetes API destination_server URL for ArgoCD applications. | `string` | `"https://kubernetes.default.svc"` | no |
-| project_name | The ArgoCD project name to associate with this application. | `string` | `"core"` | no |
-| sync_options | A list of sync options for the application (e.g., `["CreateNamespace=true"]`) | `list(string)` | `[]` | no |
-| value_sources | A map of value sources that can be referenced by applications. | `map(object({...}))` | `{}` | no |
-| manifest_app | Configuration for applications using plain Kubernetes manifests. | `object({...})` | `null` | no |
-| helm_app | Configuration for applications using Helm charts. | `object({...})` | `null` | no |
-| sync_policy | The sync policy configuration for the ArgoCD application. | `object({...})` | `{}` | no |
-| cascade | Enable cascading deletion for the application. | `bool` | `true` | no |
-| wait | Wait for the application to be synced. | `bool` | `true` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| application_name | Name of the ArgoCD application |
-| application_namespace | Namespace of the ArgoCD application |
-| application_id | ID of the ArgoCD application |
-| project_name | Project name associated with the application |
-| destination_server | Destination server for the application |
-| destination_namespace | Destination namespace for the application |
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -110,9 +83,9 @@ No modules.
 | <a name="input_app_namespace"></a> [app\_namespace](#input\_app\_namespace) | The namespace where the ArgoCD application resource should be created. | `string` | n/a | yes |
 | <a name="input_cascade"></a> [cascade](#input\_cascade) | Enable cascading deletion for the application. | `bool` | `true` | no |
 | <a name="input_destination_server"></a> [destination\_server](#input\_destination\_server) | The Kubernetes API destination\_server URL for ArgoCD applications. | `string` | `"https://kubernetes.default.svc"` | no |
-| <a name="input_helm_app"></a> [helm\_app](#input\_helm\_app) | Configuration for applications using Helm charts. | <pre>object({<br/>    helm_repo       = string<br/>    chart           = string<br/>    target_revision = optional(string, null)<br/>    value_files     = optional(list(string), [])<br/>    values          = optional(map(string), {})<br/>    release_name    = optional(string)<br/>  })</pre> | `null` | no |
+| <a name="input_helm_app"></a> [helm\_app](#input\_helm\_app) | Configuration for applications using Helm charts. | <pre>object({<br/>    helm_repo                  = string<br/>    chart                      = string<br/>    target_revision            = optional(string, null)<br/>    value_files                = optional(list(string), [])<br/>    values                     = optional(map(string), {})<br/>    release_name               = optional(string)<br/>    ignore_missing_value_files = optional(bool, false)<br/>    pass_credentials           = optional(bool, false)<br/>    skip_crds                  = optional(bool, false)<br/>    skip_schema_validation     = optional(bool, false)<br/>  })</pre> | `null` | no |
 | <a name="input_ignore_differences"></a> [ignore\_differences](#input\_ignore\_differences) | Configurations for ignoring differences during sync operations.<br/><br/>The following nested properties are supported:<br/>- group: The Kubernetes resource Group to match for.<br/>- jq\_path\_expressions: List of JQ path expression strings targeting the field(s) to ignore.<br/>- json\_pointers: List of JSONPaths strings targeting the field(s) to ignore.<br/>- kind: The Kubernetes resource Kind to match for.<br/>- name: The Kubernetes resource Name to match for.<br/>- namespace: The Kubernetes resource Namespace to match for. | <pre>list(object({<br/>    group               = optional(string, null)<br/>    jq_path_expressions = optional(set(string), [])<br/>    json_pointers       = optional(set(string), [])<br/>    kind                = optional(string, null)<br/>    name                = optional(string, null)<br/>    namespace           = optional(string, null)<br/>  }))</pre> | `null` | no |
-| <a name="input_manifest_app"></a> [manifest\_app](#input\_manifest\_app) | Configuration for applications using plain Kubernetes manifests. | <pre>object({<br/>    source_repo     = string<br/>    path            = string<br/>    target_revision = string<br/>  })</pre> | `null` | no |
+| <a name="input_manifest_app"></a> [manifest\_app](#input\_manifest\_app) | Configuration for applications using directory or kustomize sources. ArgoCD auto-detects the type based on directory contents (kustomization.yaml = Kustomize, otherwise Directory). | <pre>object({<br/>    source_repo     = string<br/>    path            = string<br/>    target_revision = string<br/>  })</pre> | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The target namespace where the application should be deployed. | `string` | n/a | yes |
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | The ArgoCD project name to associate with this application. | `string` | `"core"` | no |
 | <a name="input_sync_options"></a> [sync\_options](#input\_sync\_options) | A list of sync options for the application (e.g., ["CreateNamespace=true"]) | `list(string)` | `[]` | no |

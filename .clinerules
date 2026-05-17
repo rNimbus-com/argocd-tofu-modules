@@ -1,0 +1,23 @@
+## Git Safety Rules
+
+- Git read operations (log, diff, status, show, branch -l, tag -l, etc.) are always allowed.
+- NEVER commit, tag, create branches, reset, or perform any write git operation without explicit user approval — even in Act mode.
+- NEVER push to remotes. The user will always handle pushes.
+- NEVER commit directly to main/default branch unless explicitly instructed to.
+- Don't add tags unless told. There are workflows that do that.
+- ALWAYS ask before executing any git write command.
+
+## Project-Specific Rules
+
+### Terraform Documentation Auto-Generation
+
+- The `.github/workflows/pr.yml` workflow runs `terraform-docs` to auto-generate documentation
+- Content between `<!-- BEGIN_TF_DOCS -->` and `<!-- END_TF_DOCS -->` tags in README.md is auto-generated
+- **Never manually edit content between these tags** — changes will be overwritten by the workflow
+- Only edit the user-facing documentation section above these tags
+
+### Module Development Best Practices
+
+- Always set attributes that have provider defaults to match those defaults in module code
+- Use `optional(type, default_value)` pattern for variables to avoid unnecessary drift
+- Keep module variables flexible but sensible with appropriate defaults
