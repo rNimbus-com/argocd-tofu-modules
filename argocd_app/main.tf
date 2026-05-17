@@ -30,9 +30,13 @@ resource "argocd_application" "app" {
         chart           = source.value.chart
         target_revision = source.value.target_revision
         helm {
-          release_name = can(coalesce(source.value.release_name, null)) ? source.value.release_name : var.app_name
-          value_files  = source.value.value_files
-          values       = yamlencode(source.value.values)
+          release_name               = can(coalesce(source.value.release_name, null)) ? source.value.release_name : var.app_name
+          value_files                = source.value.value_files
+          values                     = yamlencode(source.value.values)
+          ignore_missing_value_files = false
+          pass_credentials           = false
+          skip_crds                  = false
+          skip_schema_validation     = false
         }
       }
     }
