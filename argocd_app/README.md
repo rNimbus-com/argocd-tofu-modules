@@ -84,7 +84,6 @@ module "my_app" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6 |
 | <a name="requirement_argocd"></a> [argocd](#requirement\_argocd) | >=7.11 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >=2.38 |
 
 ## Providers
 
