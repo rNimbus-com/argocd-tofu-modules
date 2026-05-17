@@ -41,7 +41,7 @@ variable "value_sources" {
 }
 
 variable "manifest_app" {
-  description = "Configuration for applications using plain Kubernetes manifests."
+  description = "Configuration for applications using directory or kustomize sources. ArgoCD auto-detects the type based on directory contents (kustomization.yaml = Kustomize, otherwise Directory)."
   type = object({
     source_repo     = string
     path            = string
@@ -53,12 +53,16 @@ variable "manifest_app" {
 variable "helm_app" {
   description = "Configuration for applications using Helm charts."
   type = object({
-    helm_repo       = string
-    chart           = string
-    target_revision = optional(string, null)
-    value_files     = optional(list(string), [])
-    values          = optional(map(string), {})
-    release_name    = optional(string)
+    helm_repo                 = string
+    chart                     = string
+    target_revision           = optional(string, null)
+    value_files               = optional(list(string), [])
+    values                    = optional(map(string), {})
+    release_name              = optional(string)
+    ignore_missing_value_files = optional(bool, false)
+    pass_credentials           = optional(bool, false)
+    skip_crds                  = optional(bool, false)
+    skip_schema_validation     = optional(bool, false)
   })
   default = null
 }
